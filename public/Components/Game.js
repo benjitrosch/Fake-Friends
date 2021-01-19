@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import { withRouter } from "react-router-dom";
 import UserContainer from './UserContainer.js';
-import RoomSurvey from './RoomSurvey.js';
+import GameQuestion from './GameQuestion.js';
 import Timer from './Timer.js';
+import ConfettiMachine from './ConfettiMachine.js';
 
 let socket;
 
@@ -23,16 +24,23 @@ class Game extends Component {
         socket.on('joinedroom', data => {
             this.setState({...this.state, users: data.users, survey: data.survey.questions, questionNum: 0, answered: false});
         });
+        socket.on('readyup', data => {
+            const newReady = this.state.ready + 1;
+            this.setState({...this.state, ready: newReady});
+        })
         socket.on('startgame', data => {
             setInterval(() => this.oneSecond(), 1000);
-            this.setState({...this.state, started: true})
+            const newReady = this.state.ready + 1;
+            this.setState({...this.state, started: true, answered: false})
         });
         socket.on('nextquestion', data => {
-            console.log(`were moving onto the next question!`);
             this.nextQuestion(data);
         });
+        socket.on('winner', data => {
+            this.setState({...this.state, winner: data});
+        });
         
-        this.state={socket, users: [], showUsers: true, counter: 30, started: false, gameOver: false};
+        this.state={socket, users: [], showUsers: true, counter: 30, started: false, ready:0, gameOver: false};
     }
 
     collapseUsers(){
@@ -46,6 +54,7 @@ class Game extends Component {
         }
 
         socket.emit('ready', data);
+        this.setState({...this.state, answered: true});
     }
 
     emitAnswer(answer){
@@ -59,7 +68,8 @@ class Game extends Component {
     nextQuestion(data){
 
         if (this.state.questionNum === 4){
-            this.setState({...this.state, started: false, gameOver: true});
+            this.setState({...this.state, users: data, questionNum: 5, started: false, gameOver: true});
+            socket.emit('gameover', {room: this.props.room});
             return;
         }
 
@@ -70,7 +80,12 @@ class Game extends Component {
     oneSecond(){
         const newTime = this.state.counter - 1;
 
-        if (newTime <= 0) this.nextQuestion(this.state.users);
+        if (newTime <= 0){
+            const data = {id: this.state.socket.id, room: this.props.room, isCorrect: false}
+            socket.emit('submitanswer', data);
+
+            this.setState({...this.state, answered: true});
+        }
         else this.setState({...this.state, counter: newTime});
     }
 
@@ -103,22 +118,26 @@ class Game extends Component {
 
         const startbutton = this.state.started || this.state.gameOver ? <div></div> : (
             <div id='startbtn'>
-                <button onClick={this.startGame}>Start Game</button>
+                Waiting for {this.state.users.length - this.state.ready} players...
+                <button onClick={this.startGame} disabled={this.state.answered || this.state.users.length === 0}>Start Game</button>
             </div>);
 
         const nextquestion = this.state.survey && this.state.started && !this.state.gameOver ? (
             <div>
-                <RoomSurvey question={this.state.survey[this.state.questionNum].question} answered={this.state.answered} clickEvent={this.emitAnswer} />
+                <GameQuestion question={this.state.survey[this.state.questionNum].question} answered={this.state.answered} clickEvent={this.emitAnswer} />
             </div>) : <div></div>;
 
-        const results = this.state.gameOver ? (
-            <div className='modal' style={{top: '25%', left: '50%'}} >
+        const results = this.state.gameOver && this.state.winner ? (
+            <div className='modal' id='exitgame' >
                 <div className='header'>Results</div>
                 <form>
-                    <h4>Congrats, go home!</h4>
+                    <h4 style={{textAlign: 'center'}}>Congrats to {this.state.winner.name} for being a real friend,<br/>with {this.state.winner.score} total points!</h4>
                     <button onClick={this.props.exitGame} >Exit</button>
                 </form>
             </div>) : <div></div>;
+
+        const confetti = this.state.gameOver ? (
+            <ConfettiMachine />) : <div></div>;
 
         return(
             <div>
@@ -128,6 +147,7 @@ class Game extends Component {
                 {nextquestion}
                 {startbutton}
                 {results}
+                {confetti}
                 {timer}
             </div>
         )

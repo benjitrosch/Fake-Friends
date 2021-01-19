@@ -52,12 +52,39 @@
     margin-left: 18%;
 }
 
+#clock{
+    position: fixed;
+    top: 0;
+    right: 0;
+    margin-top: 48px;
+    margin-right: 16px;
+    padding: 16px;
+    border-radius: 50%;
+    font-size: 96px;
+    color: black;
+    background: white;
+    z-index: 50;
+}
+
 #leavegamebtn{
     position: fixed;
     z-index: 50;
     bottom: 0;
     right: 0;
     background-color: $winter-sky;
+}
+
+#startbtn{
+    position: fixed;
+    top: 50%;
+    left: 45%;
+    margin: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    text-align: center;
+    color: white;
 }
 
 .gamequestion{
@@ -67,33 +94,31 @@
     justify-content: center;
     flex-direction: column;
     text-align: center;
-    padding: 64px;
-    top: 50%;
-    left: 50%;
-    background-color: $light-grey;
+    font-size: 72px;
+    width: 100%;
+    height: 100%;
+    color: white;
 }
 
-.gameButton{
-    margin: 0px 8px;
-    padding: 8px 32px;
+#answers{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 64px;
 }
 
-#clock{
+.gamebtn{
+    margin: 0px 64px;
+    font-size: 48px;
+    padding: 16px 64px;
+}
+
+#exitgame{
     position: fixed;
-    top: 0;
-    right: 0;
-    margin: 32px;
-    padding: 32px;
-    border-radius: 50%;
-    font-size: 96px;
-    color: black;
-    background: white;
-    z-index: 50;
+    top: 25%;
+    left: 40%;
 }
 
-#startbtn{
+#confetti{
     position: fixed;
-    top: 50%;
-    left: 50%;
-    margin: auto;
 }

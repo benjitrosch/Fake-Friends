@@ -118,6 +118,8 @@ io.on('connection', (socket) => {
     if (room.answeredQuestion() === room.users.length) {
       room.reset();
       io.sockets.to(data.room).emit('startgame');
+    } else {
+      io.sockets.to(data.room).emit('readyup');
     }
   });
 
@@ -134,6 +136,20 @@ io.on('connection', (socket) => {
       io.sockets.to(data.room).emit('nextquestion', room.users);
     }
   });
+
+  socket.on('gameover', data => {
+    const room = rooms.filter(currRoom => currRoom.key === data.room)[0];
+
+    var winner = room.users.reduce((prev, current) => {
+      if (+current.id > +prev.id) {
+          return current;
+      } else {
+          return prev;
+      }
+    });
+
+    io.sockets.to(data.room).emit('winner', winner);
+  })
 
   // helper function to emit current room data back to front end -->
   function sendRoomData(room, users, survey){

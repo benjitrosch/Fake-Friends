@@ -6,7 +6,7 @@ const Navbar = (props) => {
     return(
         <div id='topbar'>
             <h5>
-                Currently logged in as {props.username}
+                {props.username === 'NO USER FOUND' ? `Not currently logged in` : `Currently logged in as ${props.username}`}
             </h5>
             <div id='navlogin'>
                 <button onClick={props.login}><h5>Sign up</h5></button>
