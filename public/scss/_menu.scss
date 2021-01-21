@@ -25,14 +25,14 @@
     border-left:5px solid $medium-grey;
 }
 
-#createBtn{
+.createBtn{
     width: 100%;
 }
 
 #startBtn{
     background-color: $azure;
     width: 100%;
-
+    
     &:active{
         background-color: $winter-sky;
     }

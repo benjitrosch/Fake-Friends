@@ -1,10 +1,12 @@
 const Survey = require('../models/surveyModel');
+const User = require('../models/userModel');
 
 // creates a new survey in database --->
 exports.createNewSurvey = (req, res, next) => {
-  const newSurvey = req.body;
+  const questions = req.body.questions;
+  const user_id = req.body.user_id;
 
-  Survey.create({ questions: newSurvey })
+  Survey.create({ questions, user_id })
   .then(data => {
     res.locals.roomId = data._id;
     next();

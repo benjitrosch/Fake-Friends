@@ -3,9 +3,10 @@ const router = express.Router();
 
 const surveyController = require('../controller/surveyController');
 const sessionController = require('../controller/sessionController');
+const userController = require('../controller/userController');
 
 // adds a new survey to db --->
-router.post('/addsurvey', sessionController.isLoggedIn, surveyController.createNewSurvey, (req, res) => {
+router.post('/addsurvey', sessionController.isLoggedIn, surveyController.createNewSurvey, userController.updateSurveys, (req, res) => {
     res.status(200).json(res.locals.roomId);
 });
 

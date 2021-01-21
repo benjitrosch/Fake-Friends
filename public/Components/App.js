@@ -7,6 +7,7 @@ import {
 } from "react-router-dom";
 import Menu from './Menu.js';
 import QuestionContainer from './QuestionContainer.js';
+import UserSurveys from './UserSurveys.js';
 import Login from './Login.js';
 import Enter from './Enter.js';
 import Game from './Game.js';
@@ -20,11 +21,13 @@ class App extends Component {
     super(props);
 
     this.getUsername = this.getUsername.bind(this);
+    this.getSurveys = this.getSurveys.bind(this);
 
     this.createNewSurvey = this.createNewSurvey.bind(this);
     this.addQuestion = this.addQuestion.bind(this);
     this.sendSurvey = this.sendSurvey.bind(this);
     this.exitSurvey = this.exitSurvey.bind(this);
+    this.exitMySurveys = this.exitMySurveys.bind(this);
     
     this.openRoomPrompt = this.openRoomPrompt.bind(this);
     this.exitRoomPrompt = this.exitRoomPrompt.bind(this);
@@ -44,11 +47,23 @@ class App extends Component {
     const id = this.login.current.getUserID();
 
     fetch(`/user/${id}`)
-        .then(response=>response.json())
-        .then(data=>{
-          console.log(data)
-          this.setState({...this.state, username: data})
-        });
+      .then(response=>response.json())
+      .then(data=>{
+        console.log(data)
+        this.setState({...this.state, username: data})
+      });
+  }
+
+  getSurveys(){
+
+    const id = this.login.current.getUserID();
+
+    fetch(`/user/survey/${id}`)
+      .then(response=>response.json())
+      .then(data=>{
+        this.setState({...this.state, userSurveys: data});
+      });
+
   }
 
   // sets this.state.create to true so that the new survey popup will display
@@ -65,7 +80,10 @@ class App extends Component {
   // after adding the last question in the survey send the array of questions to the backend to be written to the DB
   sendSurvey(event){
     event.preventDefault();
-    const body = this.state.questions;
+    const body = {
+      questions: this.state.questions,
+      user_id: this.login.current.getUserID(),
+    };
 
     fetch(`/survey/addsurvey`, {method: 'POST', headers: {'Content-Type': 'Application/JSON'}, body: JSON.stringify(body)})
       .then(res=>res.json())
@@ -76,6 +94,10 @@ class App extends Component {
   // event handler for when the user exits the create survey popup 
   exitSurvey(){
     this.setState({...this.state, create: false, enterRoom: false, questions: []});
+  }
+  
+  exitMySurveys(){
+    this.setState({...this.state, userSurveys: null});
   }
   // sets this.state.enterRoom to true which causes the enter room code popup to display
   openRoomPrompt(){
@@ -115,6 +137,7 @@ class App extends Component {
     // logic to handle conditional popups
     // these lines control the crete survey and enter room popups
     const questions = this.state.create ? <QuestionContainer ref={this.question} clickEvent={this.addQuestion} submit={this.sendSurvey} exit={this.exitSurvey} number={this.state.questions.length} questions={this.state.questions} /> : <div></div>;
+    const surveys = this.state.userSurveys ? <UserSurveys surveys={this.state.userSurveys} exit={this.exitMySurveys} /> : <div></div>;
     const enter = this.state.enterRoom ? <Enter submit={this.enterRoomCode} exit={this.exitRoomPrompt} /> : <div></div>;
 
     // logic to handle redirects to game room and homepage
@@ -129,9 +152,10 @@ class App extends Component {
           <h1 id='title'>FAKE FRIENDS</h1>
           <h1 id='tagline'>"NOBODY LIKES YOU!"</h1>
           <h3>Choose your game-mode:</h3>
-          <Menu newSurvey={this.createNewSurvey} enterRoom={this.openRoomPrompt} enabled={!this.state.create && !this.state.enterRoom} />
+          <Menu newSurvey={this.createNewSurvey} getSurveys={this.getSurveys} enterRoom={this.openRoomPrompt} enabled={!this.state.create && !this.state.enterRoom} />
         </div>
         {questions}
+        {surveys}
         {enter}
         {redirectGame}
       </div>

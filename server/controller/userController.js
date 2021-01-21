@@ -18,7 +18,6 @@ exports.postLogin = (req, res, next) => {
   });
 };
 
-
 // verify user's login credentials --->
 exports.verifyUser =(req, res, next)=>{
   const userLogin = req.body;
@@ -48,6 +47,32 @@ exports.getUser = (req, res, next) => {
       const errorObj = {
         message: `Error in user.getUser: error getting user from DB: ${err}`,
         log: 'Error in userController.getUser. Check error error logs'
+      };
+      return next(errorObj);
+    })
+}
+
+exports.updateSurveys = (req, res, next) => {
+
+  const user_id = req.body.user_id;
+  const surveyID = res.locals.roomId;
+
+  User.findOneAndUpdate({_id: user_id}, {$push: {survey_ids: surveyID}})
+    .then(()=>{
+      return next();
+    })
+}
+
+exports.getUserSurveys = (req, res, next) => {
+  User.findOne({_id: req.params.id})
+    .then(data => {
+      res.locals.surveys = data.survey_ids;
+      return next();
+    })
+    .catch(err => {
+      const errorObj = {
+        message: `Error in user.getUserSurveys: error getting user surveys from DB: ${err}`,
+        log: 'Error in userController.getUserSurveys. Check error error logs'
       };
       return next(errorObj);
     })

@@ -20,6 +20,10 @@ router.get('/:id', userController.getUser, (req, res) => {
   res.status(200).json(res.locals.username);
 })
 
+router.get('/survey/:id', userController.getUserSurveys, (req, res) => {
+  res.status(200).json(res.locals.surveys);
+})
+
 // routes a post request to log a user in  --->
 router.post('/login', 
   userController.verifyUser,
