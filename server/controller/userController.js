@@ -6,7 +6,6 @@ exports.postLogin = (req, res, next) => {
 
   User.create(newUser)
   .then(data => {
-    console.log('USER CREATED----->', data)
     res.locals.userId = data._id;
     next();
   })
@@ -26,7 +25,6 @@ exports.verifyUser =(req, res, next)=>{
   User.findOne(userLogin)
   .then(data => {
     if (data === null) return res.redirect('/user/register');
-    console.log('VERIFY USER DATA---->', data);
     res.locals.userId = data._id;
     next();
   })

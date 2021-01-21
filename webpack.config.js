@@ -8,6 +8,7 @@ module.exports = {
     path: path.resolve(__dirname, 'build'),
     filename: 'bundle.js'
   },
+  plugins: [new MiniCssExtractPlugin()],
   devServer: {
     publicPath: 'localhost://8080/build',
     proxy: {
