@@ -5,7 +5,15 @@ const cookieParser = require('cookie-parser');
 const PORT = process.env.PORT;
 const mongoose = require('mongoose');
 
-const MONGO_URI = require('./models/database');
+let MONGO_URI;
+
+console.log(process.env.NODE_ENV);
+
+if (process.env.NODE_ENV === 'development') MONGO_URI = require('../settings.js');
+else MONGO_URI = process.env.MONGO_URI
+
+console.log(MONGO_URI)
+
 const surveyRouter = require('./routes/surveyRouter');
 const userRouter = require('./routes/userRouter');
 
