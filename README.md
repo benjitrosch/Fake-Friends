@@ -17,20 +17,40 @@
 
 One player creates a survey, and sends a link to their friends. Then, they all join a room together and compete to see who knows their friend best!
 
+<br>
+
 # **How to play**
 
 - **Make a new survey**: one player will create a 5 question survey of yes or no questions.
 <br>
-<image width=400 align="center" src="./public/assets/examplequestion.png">
+<p align="center"><image width=400 align="center" src="./public/assets/examplequestion.png"></p>
 
 - **Send a room code to your friends**: they will send a room an auto-generated room code to their friends to play their survey.
 <br>
-<image width=400 align="center" src="./public/assets/roomcode.png">
+<p align="center"><image width=400 align="center" src="./public/assets/roomcode.png"></p>
 
 - **Join the lobby**: a group of up to 6 friends will enter the room code and join the lobby, and once they're all ready the game will start.
 <br>
-<image width=400 align="center" src="./public/assets/lobby.png">
+<p align="center"><image width=800 align="center" src="./public/assets/lobby.png"></p>
 
 - **Pick a winner**: whoever answers the most questions right by the end will be crowned the only "true" friend!
 <br>
-<image width=400 align="center" src="./public/assets/winner.png">
+<p align="center"><image width=400 align="center" src="./public/assets/winner.png"></p>
+
+# **Contributors**
+
+[Benjamin Trosch](https://www.linkedin.com/in/benjitrosch/) [@benjitrosch](https://github.com/benjitrosch)
+
+[Dan Snyder](https://www.linkedin.com/in/daniel-snyder-77aa4bbb/) [@dasnyder3](https://github.com/dasnyder3)
+
+[Emily Krebs](https://www.linkedin.com/in/eric-peng-40b37b13b/) [@ericpengJoJo](https://github.com/ericpengJoJo)
+
+[Eric Peng](https://www.linkedin.com/in/emilyrkrebs/) [@emilykrebs](https://github.com/emilykrebs)
+
+[Judy Tan](https://www.linkedin.com/in/judy-tan93/) [@emilykrebs](https://github.com/Judanator)
+
+___
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE.md](https://github.com/benjitrosch/Fake-Friends/blob/main/LICENSE) file for details.
