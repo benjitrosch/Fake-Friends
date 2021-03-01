@@ -3,7 +3,7 @@
 </p>
 
 <h1 align="center">
-<a href='https://fakefriends.gg/'>Fake Friends</a>
+<a href='https://fakefriends.gg/'>fakefriends.gg</a>
 </h1>
 
 <p align="center">
